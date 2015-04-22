@@ -3,7 +3,8 @@ library(cluster)
 library(psych)
 
 # read CSV file - (kmeans_data.csv) - convert to a matrix
-data1 <- read.table(file='UniqueCallDuration1.csv', sep=',', header=T, row.names=1)
+# data1 <- read.table(file='UniqueCallDuration1.csv', sep=',', header=T, row.names=1)
+data1 <- read.table(file=filePath, sep=',', header=T, row.names=1)
 data.p <- as.matrix(data1)
 
 # Ask for user input - convert raw counts to percents?
