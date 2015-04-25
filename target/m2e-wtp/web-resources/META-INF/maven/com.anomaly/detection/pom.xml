@@ -32,6 +32,31 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<!-- R dependancies -->
+		<dependency>
+			<groupId>org.nuiton.thirdparty</groupId>
+			<artifactId>JRI</artifactId>
+			<version>0.8-4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.lucarosellini.rJava</groupId>
+			<artifactId>JRIEngine</artifactId>
+			<version>0.9-7</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nuiton.thirdparty</groupId>
+			<artifactId>REngine</artifactId>
+			<version>1.7-3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20140107</version>
+		</dependency>
 				
 		<!-- AspectJ -->
 		<dependency>

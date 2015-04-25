@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Calculate the total number of unique callers and calees
  * This program have dependency on Hackathon_CDR_Sample.csv data file
- * @author Team13
+ * @author Team12
  *
  */
 public class DataModeling {
@@ -97,7 +97,7 @@ public class DataModeling {
 
 		Map<String, HashSet<String>> uniqueCalee = new HashMap<String, HashSet<String>>();
 		Map<String, Integer> uniqueCalleesDuration = new HashMap<String,Integer>();
-		String csvFile = "Hackathon_CDR_Sample.csv";
+		String csvFile = "/Users/Monil/GitHub/FakeCallDetection/src/test/Hackathon_CDR_Sample.csv";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
@@ -123,12 +123,11 @@ public class DataModeling {
 			}
 			Set<String> keys = uniqueCalee.keySet();
 			// int count = 99;
-			System.out.println("Unique Calee" + "\t" + "TotalUniqueCalee");//+"\t"+"TotalCallDuration");
+			System.out.println("UniqueCalee" + "\t" + "TotalUniqueCalee"+"\t"+"TotalCallDuration");
 			for (String key : keys) {
 				// if (count > 0) {
 				if (!key.isEmpty()) {
-					System.out
-							.println(key + "\t" + uniqueCalee.get(key).size());//+"\t"+uniqueCalleesDuration.get(key));
+					System.out.println(key + "\t" + uniqueCalee.get(key).size()+"\t"+uniqueCalleesDuration.get(key));
 					// count--;
 				}
 				// } else {
