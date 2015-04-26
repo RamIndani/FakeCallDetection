@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.anomalydetection.util.Utility;
+
 /**
  * Calculate the total number of unique callers and calees
  * This program have dependency on Hackathon_CDR_Sample.csv data file
@@ -21,23 +23,24 @@ import java.util.Set;
 public class DataModeling {
 
 	public static void main(String[] args) {
-		DataModeling dm = new DataModeling();
-		dm.uniqueCalee();
+		DataModeling.uniqueCallee("Hackathon_CDR_Sample.csv");
+		DataModeling.uniqueCallers("Hackathon_CDR_Sample.csv");
 
 	}
 
 	/**
 	 * uniqueCallers method calculates total number of unique calls that are made from any single number
 	 */
-	public static List<UniqueCaller> uniqueCallers() {
+	public static String uniqueCallers(String fileName) {
 		Map<String, HashSet<String>> uniqueCallers = new HashMap<String, HashSet<String>>();
 		Map<String, Integer> uniqueCallersDuration = new HashMap<String,Integer>();
 		List<UniqueCaller> uniqueCaller = new ArrayList<UniqueCaller>();
-		String csvFile = "Hackathon_CDR_Sample.csv";
+//		String csvFile = "Hackathon_CDR_Sample.csv";
+		String csvFile = fileName;
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-
+		String resultFileName = null;
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
@@ -58,22 +61,25 @@ public class DataModeling {
 				}
 			}
 			// int count = 99;
-			System.out.println("Unique Callers" + "\t" + "TotalUniqueCallers");//+"\t"+"TotalCallDuration");
-			Set<String> keys = uniqueCallers.keySet();
-			for (String key : keys) {
-
-				// if (count > 0) {
-				if (!key.isEmpty()) {
-					UniqueCaller uniqueCallerObj = new UniqueCaller(key,uniqueCallers.get(key).size());
-					uniqueCaller.add(uniqueCallerObj);
-					System.out.println(key + "\t"
-							+ uniqueCallers.get(key).size());//+"\t"+uniqueCallersDuration.get(key));
-					// count--;
-				}
-				// } else {
-				// break;
-				// }
-			}
+//			System.out.println("Unique Callers" + "\t" + "TotalUniqueCallers");//+"\t"+"TotalCallDuration");
+//			Set<String> keys = uniqueCallers.keySet();
+//			for (String key : keys) {
+//
+//				// if (count > 0) {
+//				if (!key.isEmpty()) {
+//					UniqueCaller uniqueCallerObj = new UniqueCaller(key,uniqueCallers.get(key).size());
+//					uniqueCaller.add(uniqueCallerObj);
+//					System.out.println(key + "\t"
+//							+ uniqueCallers.get(key).size());//+"\t"+uniqueCallersDuration.get(key));
+//					// count--;
+//				}
+//				// } else {
+//				// break;
+//				// }
+//			}
+			String fileHeader = "UniqueCallers,TotalUniqueCallers,TotalCallDuration";
+			resultFileName = "UniqueCallers.csv";
+			Utility.writeToCSV(fileHeader, resultFileName, uniqueCallers, uniqueCallersDuration);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -87,26 +93,26 @@ public class DataModeling {
 				}
 			}
 		}
-		return uniqueCaller;
+		return resultFileName;
 	}
 
 	/**
 	 * uniqueCalee method calculates total number of unique calls received on all the calees
 	 */
-	public void uniqueCalee() {
+	public static String uniqueCallee(String fileName) {
 
 		Map<String, HashSet<String>> uniqueCalee = new HashMap<String, HashSet<String>>();
 		Map<String, Integer> uniqueCalleesDuration = new HashMap<String,Integer>();
-		String csvFile = "/Users/Monil/GitHub/FakeCallDetection/src/test/Hackathon_CDR_Sample.csv";
+//		String csvFile = "Hackathon_CDR_Sample.csv";
+		String csvFile = fileName;
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-
+		String resultFileName = null;
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((line = br.readLine()) != null) {
-
 				// use comma as separator
 				String[] CDRData = line.split(cvsSplitBy);
 				if (uniqueCalee.containsKey(CDRData[7])) {
@@ -121,20 +127,22 @@ public class DataModeling {
 					uniqueCalleesDuration.put(CDRData[7], Integer.valueOf(CDRData[15]));
 				}
 			}
-			Set<String> keys = uniqueCalee.keySet();
-			// int count = 99;
-			System.out.println("UniqueCalee" + "\t" + "TotalUniqueCalee"+"\t"+"TotalCallDuration");
-			for (String key : keys) {
-				// if (count > 0) {
-				if (!key.isEmpty()) {
-					System.out.println(key + "\t" + uniqueCalee.get(key).size()+"\t"+uniqueCalleesDuration.get(key));
-					// count--;
-				}
-				// } else {
-				// break;
-				// }
-			}
-
+//			Set<String> keys = uniqueCalee.keySet();
+//			// int count = 99;
+//			System.out.println("UniqueCalee" + "\t" + "TotalUniqueCalee"+"\t"+"TotalCallDuration");
+//			for (String key : keys) {
+//				// if (count > 0) {
+//				if (!key.isEmpty()) {
+//					System.out.println(key + "\t" + uniqueCalee.get(key).size()+"\t"+uniqueCalleesDuration.get(key));
+//					// count--;
+//				}
+//				// } else {
+//				// break;
+//				// }
+//			}
+			String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
+			resultFileName = "UniqueCalee.csv";
+			Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
 			// System.out.println("Average = "+total/uniqueCallers.size());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -149,7 +157,7 @@ public class DataModeling {
 				}
 			}
 		}
-
+		return resultFileName;
 	}
 
 }
