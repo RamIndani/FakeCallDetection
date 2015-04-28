@@ -35,16 +35,12 @@ function fraud(number){
 	<nav class="navbar">
   		<div class="container-fluid">
   			<div class="navbar-header">
-      			<a class="navbar-brand" href="#">
+      			<a class="navbar-brand" href="/home"">
       				<h3 class="brand" style="color:#FFFFFF"><b>FakeCallDetection!</b></h3>
       			</a>
     		</div>
   		  	<ul class="nav navbar-nav navbar-right">
-           <!-- <li class="navbar-text">
-           <p class="navbar-text">
-            <a href="#">Charts</a>
-          </p> 
-        </li>
+          <!--
 				<li class="navbar-text">
 					<form class="navbar-form" role="search">
             <div class="form-group">
@@ -340,7 +336,7 @@ $.ajax({
 </script>
 <br/>
 <div class="col-md-2 well" style="width:80%;margin-left:50px;">
-	<h3 class="text-center">Possible Anomalies Unique Calleers</h3>
+	<h3 class="text-center">Possible Anomalies Unique Callers</h3>
 	<table style="width:100%;" id="anomalyTable" class="table table-striped"> 
 	<thead> 
 	<tr> 
