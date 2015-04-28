@@ -1497,14 +1497,20 @@ var jsonData ={
 	                  ]
 	              };
 
+$.ajax({
+	  url: "/kmeansucallee"
+	}).done(function(result) {
+		var jsonData = result;
 var data=[];
-for(var i=0;i<jsonData.CallingNumber.length;i++){
-  var input=[jsonData.CallingNumber[i], jsonData.TotalCallDuration[i]];
+for(var i=0;i<jsonData.TotalCallDuration.length;i++){
+  var input=[ jsonData.kclust[i], jsonData.TotalCallDuration[i]];
   data.push(input);
 }
    
-   // var margin = {top: 20, right: 0, bottom: 60, left: 0}
-    
+var margin = {top: 20, right: 50, bottom: 60, left: 50}
+, width = 960 - margin.left - margin.right
+, height = 500 - margin.top - margin.bottom;
+    //var width=960;
     var x = d3.scale.linear()
               .domain([0, d3.max(data, function(d) { return d[0]; })])
               .range([ 0, width ]);
@@ -1553,3 +1559,4 @@ for(var i=0;i<jsonData.CallingNumber.length;i++){
           .attr("cx", function (d,i) { return x(d[0]); } )
           .attr("cy", function (d) { return y(d[1]); } )
           .attr("r", 8);
+	});
