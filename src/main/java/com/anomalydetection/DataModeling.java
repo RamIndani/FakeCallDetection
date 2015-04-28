@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.anomaly.detection.HomeController;
 import com.anomalydetection.util.Utility;
 
 /**
@@ -23,6 +27,8 @@ import com.anomalydetection.util.Utility;
  */
 public class DataModeling {
 
+	private static final Logger logger = LoggerFactory.getLogger(DataModeling.class);
+	
 	public static void main(String[] args) {
 		DataModeling.uniqueCallee("Hackathon_CDR_Sample.csv");
 		DataModeling.uniqueCallers("Hackathon_CDR_Sample.csv");
@@ -45,6 +51,7 @@ public class DataModeling {
 		String line = "";
 		String cvsSplitBy = ",";
 		String resultFileName = null;
+		String resultFileNameForest = null;
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
@@ -81,9 +88,15 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
+			
+			logger.info("unique caller create file----------------");
 			String fileHeader = "UniqueCallers,TotalUniqueCallers,TotalCallDuration";
-			resultFileName = "UniqueCallers.csv";
+			resultFileName = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallers.csv";
 			Utility.writeToCSV(fileHeader, resultFileName, uniqueCallers, uniqueCallersDuration);
+			
+			String fileHeaderForest = "UniqueCallers,TotalUniqueCallers,CallDuration";
+			resultFileNameForest = "/Users/ramnivasindani/git/FakeCallDetection/randomForestTestData.csv";
+			Utility.writeToCSV(fileHeaderForest, resultFileNameForest, uniqueCallers, uniqueCallersDuration);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -111,6 +124,7 @@ public class DataModeling {
 		String line = "";
 		String cvsSplitBy = ",";
 		String resultFileName = null;
+		String resultFileNameForest = null;
 		try {
 
 			br = new BufferedReader(new FileReader(csvFile));
@@ -147,9 +161,14 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
+			/*logger.info("unique caller create file*************");
 			String fileHeader = "UniqueCallers,TotalUniqueCallers,TotalCallDuration";
 			resultFileName = "UniqueCallers.csv";
 			Utility.writeToCSV(fileHeader, resultFileName, uniqueCallers, uniqueCallersDuration);
+			
+			String fileHeaderForest = "UniqueCallers,TotalUniqueCallers,CallDuration";
+			resultFileNameForest = "randomForestTestData.csv";
+			Utility.writeToCSV(fileHeaderForest, resultFileNameForest, uniqueCallers, uniqueCallersDuration);*/
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -179,7 +198,7 @@ public class DataModeling {
 	 * uniqueCalee method calculates total number of unique calls received on all the calees
 	 */
 	public static String uniqueCallee(String fileName) {
-
+		logger.info("unique callee create file*************"+fileName);
 		Map<String, HashSet<String>> uniqueCalee = new HashMap<String, HashSet<String>>();
 		Map<String, Integer> uniqueCalleesDuration = new HashMap<String,Integer>();
 //		String csvFile = "Hackathon_CDR_Sample.csv";
@@ -219,11 +238,12 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
-			//String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
-			//resultFileName = "UniqueCalee.csv";
-			//Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
-			// System.out.println("Average = "+total/uniqueCallers.size());
+			logger.info("unique callee create file*************");
+			String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
+			resultFileName = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallee.csv";
+			Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
 		} catch (FileNotFoundException e) {
+			logger.info("file not found");
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -281,10 +301,11 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
-			//String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
-			//resultFileName = "UniqueCalee.csv";
-			//Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
-			// System.out.println("Average = "+total/uniqueCallers.size());
+			/*logger.info("unique callee create file ------------");
+			String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
+			resultFileName = "UniqueCalee.csv";
+			Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
+			*/// System.out.println("Average = "+total/uniqueCallers.size());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

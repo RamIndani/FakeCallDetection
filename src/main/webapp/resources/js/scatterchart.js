@@ -1498,9 +1498,11 @@ var jsonData ={
 	              };
 
 $.ajax({
-	  url: "/kmeansucallee"
+	  url: "/kmeansUniqueCallers"
 	}).done(function(result) {
 		var jsonData = result;
+		jsonData = JSON.parse(jsonData);
+		console.log(jsonData);
 var data=[];
 for(var i=0;i<jsonData.TotalCallDuration.length;i++){
   var input=[ jsonData.kclust[i], jsonData.TotalCallDuration[i]];

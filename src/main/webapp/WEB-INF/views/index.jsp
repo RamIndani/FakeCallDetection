@@ -179,12 +179,12 @@ $.ajax({
 	
 	
 $.ajax({
-	  url: "/kmeansucaller",
+	  url: "/kmeansUniqueCallee",
+	  
 	  //contentType: "application/json",
 	  dataType: "json"
 	}).done(function(result) {
 		var jsonData = result;
-
 /*
  * scatter plot
  */

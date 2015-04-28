@@ -38,13 +38,15 @@ import com.anomalydetection.DataModeling;
  */
 @Controller
 public class HomeController {
-	
+	Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
 	HashSet<String> markedFrauds = new HashSet<String>();
 	List<NormalElements> totalFrauds = new ArrayList<NormalElements>();
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(){
+		DataModeling.uniqueCallee("/Users/ramnivasindani/git/FakeCallDetection/testdata.csv");
+		DataModeling.uniqueCallers("/Users/ramnivasindani/git/FakeCallDetection/testdata.csv");
 		return "index";
 	}
 	
@@ -58,6 +60,7 @@ public class HomeController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<NormalElements> getfraud(){
 		totalFrauds.clear();
+		getRandomForestUniqueCallers();
 		normalDistributionCallees();
 		normalDistribution();
 		return totalFrauds;
@@ -99,24 +102,26 @@ public class HomeController {
 		return "{success:true}";
 	}
 	
-	@RequestMapping(value="/cda", method=RequestMethod.GET)
+	/*@RequestMapping(value="/cda", method=RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public String doCDA(@RequestParam String filePath){
 		//System.out.println("Hello there");
-		DataModeling.uniqueCallers(filePath);
-		DataModeling.uniqueCallee(filePath);
+		//DataModeling.uniqueCallers(filePath);
+		//DataModeling.uniqueCallee(filePath);
 		return "{success:true}";
-	}
+	}*/
 	
 	@RequestMapping(value="/uniquecallers", method=RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<CallerModel> getCDA(){
 		//System.out.println("Hello there");
-		String rootPath = System.getProperty("catalina.home");
-		File dir = new File(rootPath+"/upload");
-		File name = new File(dir, "testdata.csv");
+		//String rootPath = System.getProperty("catalina.home");
+		//File dir = new File(rootPath+"/upload");
+		File name = new File("/Users/ramnivasindani/git/FakeCallDetection/testdata.csv");
+		//DataModeling.uniqueCallers(name.getAbsolutePath());
+		logger.info("File PATH : uniqucallers : "+name.getAbsolutePath());
 		DataModeling dataModeling = new DataModeling();
 		List<CallerModel> list = new ArrayList<CallerModel>();
 		list = dataModeling.totalUniqueCallers(name.getAbsolutePath());
@@ -135,11 +140,13 @@ public class HomeController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<CallerModel> getCDAUC(){
 		//System.out.println("Hello there");
-		String rootPath = System.getProperty("catalina.home");
-		File dir = new File(rootPath+"/upload");
-		File name = new File(dir, "testdata.csv");
+		//String rootPath = System.getProperty("catalina.home");
+		//File dir = new File(rootPath+"/upload");
+		File name = new File("/Users/ramnivasindani/git/FakeCallDetection/testdata.csv");
+		//DataModeling.uniqueCallee(name.getAbsolutePath());
 		DataModeling dataModeling = new DataModeling();
 		List<CallerModel> list = new ArrayList<CallerModel>();
+		logger.info("File PATH : uniqucallee"+name.getAbsolutePath());
 		list = dataModeling.totalUniqueCallees(name.getAbsolutePath());
 		Collections.sort(list);
 		//list.add();
@@ -155,13 +162,13 @@ public class HomeController {
     public @ResponseBody String handleFileUpload(
             @RequestParam("file") MultipartFile file){
 		//String name="testdata.csv";
-		String rootPath = System.getProperty("catalina.home");
-		File dir = new File(rootPath+"/upload");
-		File name = new File(dir, "testdata.csv");
+		//String rootPath = System.getProperty("catalina.home");
+		//File dir = new File(rootPath+"/upload");
+		File name = new File( "/Users/ramnivasindani/git/FakeCallDetection/testdata.csv");
         if (!file.isEmpty()) {
-        	if (!dir.exists())
+        	/*if (!dir.exists())
                 dir.mkdirs();
-        	logger.info(dir.getAbsolutePath());
+        	logger.info(dir.getAbsolutePath());*/
             try {
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
@@ -184,20 +191,21 @@ public class HomeController {
 	public String getKMeansUniqueCallers() {
 		try {
 			// setup r session and it's working dir
-			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
-			String rWorkingDir = "FakeCallDetection/src/main/r";
-			String filePath = "FakeCallDetection/UniqueCallers.csv";
+			//Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
+			String rWorkingDir = "/Users/ramnivasindani/git/FakeCallDetection/src/main/r";
+			String filePath = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallers.csv";
 			r.eval("setwd('"+rWorkingDir+"')");
 			r.eval("filePath <- '"+filePath+"'");
 			r.eval("library(rjson)");
-			
+			logger.info("filepath absolute"+filePath);
 			// execute kmeans.r script
 			r.eval("source('kmeans.R')");
 			
 			// collect result
 			REXP xvalExp = r.eval("dataCSVJSON <- toJSON(dataCSV)");
-			JSONObject json = new JSONObject(xvalExp.toString());
-			return json.toString();
+			
+			//JSONObject json = new JSONObject(xvalExp.toString());
+			return xvalExp.asString();
 		} catch(Exception e) {
 			System.out.println("Error in kmeans clustering...");
 			e.printStackTrace();
@@ -211,9 +219,9 @@ public class HomeController {
 	public String getKMeansUniqueCallee() {
 		try {
 			// setup r session and it's working dir
-			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
-			String rWorkingDir = "FakeCallDetection/src/main/r";
-			String filePath = "FakeCallDetection/UniqueCallee.csv";
+			//Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
+			String rWorkingDir = "/Users/ramnivasindani/git/FakeCallDetection/src/main/r";
+			String filePath = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallee.csv";
 			r.eval("setwd('"+rWorkingDir+"')");
 			r.eval("filePath <- '"+filePath+"'");
 			r.eval("library(rjson)");
@@ -223,8 +231,8 @@ public class HomeController {
 			
 			// collect result
 			REXP xvalExp = r.eval("dataCSVJSON <- toJSON(dataCSV)");
-			JSONObject json = new JSONObject(xvalExp.toString());
-			return json.toString();
+			//JSONObject json = new JSONObject(xvalExp.toString());
+			return xvalExp.asString();
 		} catch(Exception e) {
 			System.out.println("Error in kmeans clustering...");
 			e.printStackTrace();
@@ -235,12 +243,13 @@ public class HomeController {
 	@RequestMapping(value="/randomForestUniqueCallers", method=RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public HashMap<String, String> getRandomForestUniqueCallers(@RequestParam String fileTestPath) {
+	public HashMap<String, String> getRandomForestUniqueCallers( ) {
 		try
 		{
-			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
+			//Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
 			// random forest train data
-			String fileTrainPath = "FakeCallDetection/src/test/randomForestTrainData.csv";
+			String fileTrainPath = "/Users/ramnivasindani/git/FakeCallDetection/randomForestTrainData.csv";
+			String fileTestPath = "/Users/ramnivasindani/git/FakeCallDetection/randomForestTestData.csv";
 			// commented area is the code to set the default directory for R, which will not be needed
 			// as we are not going to store anything in R
 			//r.eval("setwd(\"~/Documents/SJSU course documents/CMPE 239/Team Project/Project Data\")");
@@ -275,7 +284,12 @@ public class HomeController {
 					String temp1 =  uniqueCallers.get(i).toString();
 					String temp2 =  fraud.get(i).toString();
 					System.out.println(temp1 +","+temp2);
-					data.put(temp1, temp2);
+					if(temp2.equalsIgnoreCase("yes")){
+						NormalElements nEle = new NormalElements(temp1, 100);
+						if(!totalFrauds.contains(nEle)){
+							totalFrauds.add(nEle);
+						}
+					}
 				}
 				return data;
 			} catch (JSONException e)
@@ -300,9 +314,9 @@ public class HomeController {
 	public HashMap<String, String> getRandomForestUniqueCallee(@RequestParam String fileTestPath) {
 		try
 		{
-			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
+		//	Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
 			// random forest train data
-			String fileTrainPath = "FakeCallDetection/src/test/randomForestTrainData.csv";
+			String fileTrainPath = "/Users/ramnivasindani/git/FakeCallDetection/randomForestTrainData.csv";
 			// commented area is the code to set the default directory for R, which will not be needed
 			// as we are not going to store anything in R
 			//r.eval("setwd(\"~/Documents/SJSU course documents/CMPE 239/Team Project/Project Data\")");
@@ -406,8 +420,10 @@ public class HomeController {
 			normalElements.add(nElements);	
 			}else if(!callerModel.getkey().isEmpty() && !totalFrauds.contains(callerModel)){
 				NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
+				if(!totalFrauds.contains(nElements)){
 				totalFrauds.add(nElements);	
 				logger.info("Number normal: "+callerModel.getkey());
+				}
 			}
 		}
 		if(normalElements.size()>100){
@@ -460,7 +476,9 @@ public class HomeController {
 						(int) Math.round(nd.cumulativeProbability(callerModel
 								.getvalue()) * 100));
 				logger.info("Number : normalCallee"+callerModel.getkey());
-				totalFrauds.add(nElements);
+				if(!totalFrauds.contains(nElements)){
+					totalFrauds.add(nElements);
+				}
 			}
 		}
 		if(normalElements.size()>100){
