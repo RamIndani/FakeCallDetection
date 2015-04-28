@@ -40,6 +40,7 @@ import com.anomalydetection.DataModeling;
 public class HomeController {
 	
 	HashSet<String> markedFrauds = new HashSet<String>();
+	List<NormalElements> totalFrauds = new ArrayList<NormalElements>();
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
@@ -51,19 +52,37 @@ public class HomeController {
 	public String home(){
 		return "home";
 	}
+	
+	@RequestMapping(value="/getfraud", method=RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<NormalElements> getfraud(){
+		totalFrauds.clear();
+		normalDistributionCallees();
+		normalDistribution();
+		return totalFrauds;
+	}
+	
 	@RequestMapping(value = "/fraud/{number}", method = RequestMethod.GET)
 	@ResponseBody
 	public String recordFraud(@PathVariable String number) {
-		String rootPath = System.getProperty("catalina.home");
-		File dir = new File(rootPath + "/upload");
-		File name = new File(dir, "markfraud.csv");
+		//String rootPath = System.getProperty("catalina.home");
+		//File dir = new File(rootPath + "/upload");
+		File name = new File("/Users/ramnivasindani/git/FakeCallDetection/randomForestTrainData.csv");
 		FileWriter fileWriter = null;
-		if (!dir.exists())
+		/*if (!dir.exists())
 			dir.mkdirs();
-		logger.info(dir.getAbsolutePath());
+		logger.info(dir.getAbsolutePath());*/
 		try {
-			fileWriter = new FileWriter(name);
-			fileWriter.write(number + "," + "100" +","+ "yes");
+			fileWriter = new FileWriter(name,true);
+			fileWriter.append("\n")
+			.append(number)
+			.append(",")
+			.append("100")
+			.append(",")
+			.append("1000")
+			.append(",")
+			.append("yes");
 			markedFrauds.add(number);
 		} catch (Exception e) {
 			return "{success:false}";
@@ -385,6 +404,10 @@ public class HomeController {
 			if(!markedFrauds.contains(callerModel.getkey()) && !callerModel.getkey().isEmpty()){
 			NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
 			normalElements.add(nElements);	
+			}else if(!callerModel.getkey().isEmpty() && !totalFrauds.contains(callerModel)){
+				NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
+				totalFrauds.add(nElements);	
+				logger.info("Number normal: "+callerModel.getkey());
 			}
 		}
 		if(normalElements.size()>100){
@@ -424,9 +447,20 @@ public class HomeController {
 		NormalDistribution nd = new NormalDistribution(mean,variance);
 		List<NormalElements> normalElements = new ArrayList<NormalElements>();
 		for(CallerModel callerModel : list){
-			if(!markedFrauds.contains(callerModel.getkey()) && !callerModel.getkey().isEmpty()){
-			NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
-			normalElements.add(nElements);	
+			if (!markedFrauds.contains(callerModel.getkey())
+					&& !callerModel.getkey().isEmpty()) {
+				NormalElements nElements = new NormalElements(
+						callerModel.getkey(),
+						(int) Math.round(nd.cumulativeProbability(callerModel
+								.getvalue()) * 100));
+				normalElements.add(nElements);
+			} else if(!callerModel.getkey().isEmpty() && !totalFrauds.contains(callerModel)){
+				NormalElements nElements = new NormalElements(
+						callerModel.getkey(),
+						(int) Math.round(nd.cumulativeProbability(callerModel
+								.getvalue()) * 100));
+				logger.info("Number : normalCallee"+callerModel.getkey());
+				totalFrauds.add(nElements);
 			}
 		}
 		if(normalElements.size()>100){

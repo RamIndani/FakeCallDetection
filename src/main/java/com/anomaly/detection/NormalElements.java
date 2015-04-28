@@ -33,6 +33,13 @@ public class NormalElements  implements Comparable<NormalElements>{
 		return (int) (o.probability-this.probability);
 	}
 	
-	
+	@Override
+	  public boolean equals(Object other)
+	        {
+	        if(this==other) return true;
+	        if(other==null || !(other instanceof NormalElements)) return false;
+	        return this.number == (NormalElements.class.cast(other).number);
+	        }
+	  
 	
 }
