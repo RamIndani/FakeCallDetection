@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -38,6 +39,7 @@ import com.anomalydetection.DataModeling;
 @Controller
 public class HomeController {
 	
+	HashSet<String> markedFrauds = new HashSet<String>();
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
@@ -58,6 +60,7 @@ public class HomeController {
 		try {
 			fileWriter = new FileWriter(name);
 			fileWriter.write(number + "," + "100" +","+ "yes");
+			markedFrauds.add(number);
 		} catch (Exception e) {
 			return "{success:false}";
 		} finally {
@@ -375,8 +378,10 @@ public class HomeController {
 		NormalDistribution nd = new NormalDistribution(mean,variance);
 		List<NormalElements> normalElements = new ArrayList<NormalElements>();
 		for(CallerModel callerModel : list){
+			if(!markedFrauds.contains(callerModel.getkey()) && !callerModel.getkey().isEmpty()){
 			NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
 			normalElements.add(nElements);	
+			}
 		}
 		if(normalElements.size()>100){
 			return normalElements.subList(0, 100);
@@ -415,8 +420,10 @@ public class HomeController {
 		NormalDistribution nd = new NormalDistribution(mean,variance);
 		List<NormalElements> normalElements = new ArrayList<NormalElements>();
 		for(CallerModel callerModel : list){
+			if(!markedFrauds.contains(callerModel.getkey()) && !callerModel.getkey().isEmpty()){
 			NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
 			normalElements.add(nElements);	
+			}
 		}
 		if(normalElements.size()>100){
 		return normalElements.subList(0, 100);

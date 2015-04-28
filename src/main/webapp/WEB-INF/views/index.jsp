@@ -25,6 +25,8 @@ function fraud(number){
 		  url: "/fraud/"+number
 		}).done(function(result) {
 			alert("fraud number : "+number+ " marked");
+			var button = document.getElementById(number).className="btn btn-success";
+			
 		});
 }
 </script>
@@ -357,7 +359,7 @@ $.ajax({
 		<tr> 
     		<td>{{:number}}</td> 
     		<td>{{:probability}}</td> 
-    		<td><input type="button" value="Fraud" class="btn btn-danger" onclick="javascript:fraud({{:number}});"></input></td>
+    		<td><input type="button" value="Fraud" class="btn btn-danger" id={{:number}} onclick="javascript:fraud({{:number}});"></input></td>
 		</tr>
 	</script>
 
