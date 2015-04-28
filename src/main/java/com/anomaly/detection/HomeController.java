@@ -1,7 +1,15 @@
 package com.anomaly.detection;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.anomalydetection.CallerModel;
 import com.anomalydetection.DataModeling;
 
 /**
@@ -42,6 +52,69 @@ public class HomeController {
 		return "{success:true}";
 	}
 	
+	@RequestMapping(value="/uniquecallers", method=RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<CallerModel> getCDA(){
+		//System.out.println("Hello there");
+		String rootPath = System.getProperty("catalina.home");
+		File dir = new File(rootPath+"/upload");
+		File name = new File(dir, "testdata.csv");
+		DataModeling dataModeling = new DataModeling();
+		List<CallerModel> list = new ArrayList<CallerModel>();
+		list = dataModeling.totalUniqueCallers(name.getAbsolutePath());
+		Collections.sort(list);
+		//list.add();
+		//return "{success:true}";
+		
+		return list.subList(0, 25);
+	}
+	
+	@RequestMapping(value="/uniquecallee", method=RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<CallerModel> getCDAUC(){
+		//System.out.println("Hello there");
+		String rootPath = System.getProperty("catalina.home");
+		File dir = new File(rootPath+"/upload");
+		File name = new File(dir, "testdata.csv");
+		DataModeling dataModeling = new DataModeling();
+		List<CallerModel> list = new ArrayList<CallerModel>();
+		list = dataModeling.totalUniqueCallees(name.getAbsolutePath());
+		Collections.sort(list);
+		//list.add();
+		//return "{success:true}";
+		
+		return list.subList(0, 25);
+	}
+	
+	@RequestMapping(value="/upload", method=RequestMethod.POST)
+    public @ResponseBody String handleFileUpload(
+            @RequestParam("file") MultipartFile file){
+		//String name="testdata.csv";
+		String rootPath = System.getProperty("catalina.home");
+		File dir = new File(rootPath+"/upload");
+		File name = new File(dir, "testdata.csv");
+        if (!file.isEmpty()) {
+        	if (!dir.exists())
+                dir.mkdirs();
+        	logger.info(dir.getAbsolutePath());
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(name));
+                stream.write(bytes);
+                stream.close();
+                return "File uploaded!";
+            } catch (Exception e) {
+                return "Upload failed";
+            }
+        } else {
+            return "Empty file";
+        }
+    }
+
+	
 	@RequestMapping(value="/kmeansUniqueCallers", method=RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -49,8 +122,8 @@ public class HomeController {
 		try {
 			// setup r session and it's working dir
 			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
-			String rWorkingDir = "/Users/Monil/GitHub/FakeCallDetection/src/main/r";
-			String filePath = "/Users/Monil/GitHub/FakeCallDetection/UniqueCallers.csv";
+			String rWorkingDir = "FakeCallDetection/src/main/r";
+			String filePath = "FakeCallDetection/UniqueCallers.csv";
 			r.eval("setwd('"+rWorkingDir+"')");
 			r.eval("filePath <- '"+filePath+"'");
 			r.eval("library(rjson)");
@@ -76,8 +149,8 @@ public class HomeController {
 		try {
 			// setup r session and it's working dir
 			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
-			String rWorkingDir = "/Users/Monil/GitHub/FakeCallDetection/src/main/r";
-			String filePath = "/Users/Monil/GitHub/FakeCallDetection/UniqueCallee.csv";
+			String rWorkingDir = "FakeCallDetection/src/main/r";
+			String filePath = "FakeCallDetection/UniqueCallee.csv";
 			r.eval("setwd('"+rWorkingDir+"')");
 			r.eval("filePath <- '"+filePath+"'");
 			r.eval("library(rjson)");
@@ -104,7 +177,7 @@ public class HomeController {
 		{
 			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
 			// random forest train data
-			String fileTrainPath = "/Users/Monil/GitHub/FakeCallDetection/src/test/randomForestTrainData.csv";
+			String fileTrainPath = "FakeCallDetection/src/test/randomForestTrainData.csv";
 			// commented area is the code to set the default directory for R, which will not be needed
 			// as we are not going to store anything in R
 			//r.eval("setwd(\"~/Documents/SJSU course documents/CMPE 239/Team Project/Project Data\")");
@@ -166,7 +239,7 @@ public class HomeController {
 		{
 			Rengine r = new Rengine(new String[]{"--no-save"}, false, null);
 			// random forest train data
-			String fileTrainPath = "/Users/Monil/GitHub/FakeCallDetection/src/test/randomForestTrainData.csv";
+			String fileTrainPath = "FakeCallDetection/src/test/randomForestTrainData.csv";
 			// commented area is the code to set the default directory for R, which will not be needed
 			// as we are not going to store anything in R
 			//r.eval("setwd(\"~/Documents/SJSU course documents/CMPE 239/Team Project/Project Data\")");
@@ -216,6 +289,44 @@ public class HomeController {
 			e.printStackTrace();
 			return null;
 		}
+		
+	}
+	
+	@RequestMapping(value="/normal", method=RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<NormalElements> normalDistribution(){
+		String rootPath = System.getProperty("catalina.home");
+		File dir = new File(rootPath+"/upload");
+		File name = new File(dir, "testdata.csv");
+		DataModeling dataModeling = new DataModeling();
+		List<CallerModel> list = new ArrayList<CallerModel>();
+		list = dataModeling.totalUniqueCallees(name.getAbsolutePath());
+		list.addAll(dataModeling.totalUniqueCallers(name.getAbsolutePath()));
+		Collections.sort(list);
+		double[] totalElements = new double[list.size()];
+		double mean = 0d;
+		long total = 0l;
+		int count = 0;
+		for(CallerModel callerModel : list){
+			total+=callerModel.getvalue();
+			totalElements[count]=callerModel.getvalue();
+			count++;
+			if(count==100)
+				break;
+		}
+		mean = total/count;
+		StandardDeviation sd = new StandardDeviation();
+		double variance = sd.evaluate(totalElements,mean);
+		logger.info("variance is : "+variance+" mean is : "+mean);
+		NormalDistribution nd = new NormalDistribution(mean,variance);
+		List<NormalElements> normalElements = new ArrayList<NormalElements>();
+		for(CallerModel callerModel : list){
+			NormalElements nElements = new NormalElements(callerModel.getkey(), (int)Math.round(nd.cumulativeProbability(callerModel.getvalue())*100));
+			normalElements.add(nElements);	
+		}
+		return normalElements.subList(0, 100);
+		
 		
 	}
 }

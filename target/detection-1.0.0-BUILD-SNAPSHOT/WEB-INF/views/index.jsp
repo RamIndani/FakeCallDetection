@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/bootstrap.css"></link>
 <link rel="stylesheet" href="css/anomaly.css"></link>
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jsrender.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -27,35 +28,46 @@
           </p>
         </li>
 				<li class="navbar-text">
-					<form class="navbar-form navbar-left" role="search">
+					<form class="navbar-form" role="search">
             <div class="form-group">
               <label style="color:#FFFFFF">Select Fake Call Possibility Filter(%)</label>
               <input type="number" class="form-control" placeholder="Select Fake Call Possibility Filter" min="1" max="100">
             </div>
             <button type="submit" class="btn btn-default">Go!</button>
           </form>
+          
 				</li>
+				<li class="col-md-3 well navbar-text">
+				<form enctype="multipart/form-data" name="fileinfo">
+					<fieldset>
+						<legend> Upload test file  </legend>
+						<input type="file" name="file"/>
+						 <div><input type="submit" class="btn btn-primary alignleft" value="Upload" /> </div>
+					 </fieldset><br/>
+					 </form>
+					<div id="output"></div>
+	</li>
 			</ul>
   		</div>
 	</nav>
 
 	<div class="row booksgrid">
-  		<div class="col-md-1 indibook uniqucallers" id="uniqucallers">
+  		<div class="col-md-2 indibook uniqucallers" id="uniqucallers" style="width:80%;">
   		</div>
-  		<div class="col-md-1 indibook uniqucallee" id="uniqucallee">
+  		<div class="col-md-2 indibook uniqucallee" id="uniqucallee" style="width:80%;">
   			
   		</div>
       <br/>
-  		<div class="col-md-1 indibook">
-  			<img src="img/pca.png" width="515px" height="650px"/>
+  		<div class="col-md-1 indibook" style="width:80%;">
+  			<img src="img/pca.png" width="515px" height="650px" />
   		</div>
-  		<div class="col-md-1 indibook">
+  		<div class="col-md-1 indibook" style="width:80%;">
   			<img src="img/cluster.png" width="515px" height="650px"/>
   		</div>
 
   			<br/><br/><br/><br/><br/><br/>
 	</div>
-</div>
+
 	<div class="footer">
 		<b> All Rights Reserved Team12!</b>
 	</div>
@@ -198,5 +210,7 @@ bars.append("text")
   .text(function(d) { return d.value; });
   
 </script>
+
+<script type="text/javascript" src="js/anomaly.js"></script>
 </body>
 </html>
