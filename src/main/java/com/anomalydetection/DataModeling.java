@@ -2,6 +2,7 @@
 package com.anomalydetection;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -88,20 +89,23 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
-			
+			String rootPath = System.getProperty("catalina.home");
+			File dir = new File(rootPath);
 			logger.info("unique caller create file----------------");
 			String fileHeader = "UniqueCallers,TotalUniqueCallers,TotalCallDuration";
-			resultFileName = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallers.csv";
+			resultFileName = rootPath+"/UniqueCallers.csv";
 			Utility.writeToCSV(fileHeader, resultFileName, uniqueCallers, uniqueCallersDuration);
 			
 			String fileHeaderForest = "UniqueCallers,TotalUniqueCallers,CallDuration";
-			resultFileNameForest = "/Users/ramnivasindani/git/FakeCallDetection/randomForestTestData.csv";
+			resultFileNameForest = rootPath+"/randomForestTestData.csv";
 			Utility.writeToCSV(fileHeaderForest, resultFileNameForest, uniqueCallers, uniqueCallersDuration);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+		} catch(Exception e){
+			
+		}finally {
 			if (br != null) {
 				try {
 					br.close();
@@ -173,6 +177,8 @@ public class DataModeling {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}catch(Exception e){
+			
 		} finally {
 			if (br != null) {
 				try {
@@ -238,16 +244,20 @@ public class DataModeling {
 //				// break;
 //				// }
 //			}
+			String rootPath = System.getProperty("catalina.home");
+			File dir = new File(rootPath);
 			logger.info("unique callee create file*************");
 			String fileHeader = "UniqueCalee,TotalUniqueCalee,TotalCallDuration";
-			resultFileName = "/Users/ramnivasindani/git/FakeCallDetection/UniqueCallee.csv";
+			resultFileName = rootPath+"/UniqueCallee.csv";
 			Utility.writeToCSV(fileHeader, resultFileName, uniqueCalee, uniqueCalleesDuration);
 		} catch (FileNotFoundException e) {
 			logger.info("file not found");
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+		} catch(Exception e){
+			logger.info("");
+		}finally {
 			if (br != null) {
 				try {
 					br.close();
@@ -310,7 +320,9 @@ public class DataModeling {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+		} catch(Exception e){
+			
+		}finally {
 			if (br != null) {
 				try {
 					br.close();

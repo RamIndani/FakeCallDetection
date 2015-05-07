@@ -7,7 +7,7 @@ form.addEventListener('submit', function(ev) {
   //oData.append("CustomField", "This is some extra data");
 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/upload", true);
+  oReq.open("POST", "upload", true);
   oReq.onload = function(oEvent) {
     if (oReq.status == 200) {
       oOutput.innerHTML = oReq.responseText;

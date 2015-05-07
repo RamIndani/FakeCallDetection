@@ -1,5 +1,7 @@
 package com.anomaly.detection;
 
+import java.math.BigDecimal;
+
 
 
 public class NormalElements  implements Comparable<NormalElements>{
@@ -12,7 +14,7 @@ public class NormalElements  implements Comparable<NormalElements>{
 	}
 	
 	public NormalElements(String number, int prob){
-		this.number=number;
+		this.number=new BigDecimal(number).toPlainString();
 		this.probability=prob;
 	}
 	public String getNumber() {

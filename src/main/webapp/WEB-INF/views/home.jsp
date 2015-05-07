@@ -60,7 +60,7 @@ $(document).ready(function()
 	    }); 
 
 	$.ajax({
-		  url: "/getfraud"
+		  url: "getfraud"
 		}).done(function(result) {
 			$("#anomaly").html(
 	        		

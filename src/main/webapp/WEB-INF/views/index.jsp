@@ -22,7 +22,7 @@ function reload(){
 function fraud(number){
 	
 	$.ajax({
-		  url: "/fraud/"+number
+		  url: "fraud/"+number
 		}).done(function(result) {
 			alert("fraud number : "+number+ " marked");
 			var button = document.getElementById(number).className="btn btn-success";
@@ -77,12 +77,12 @@ function fraud(number){
   		<br/>
       <br/>
   		<div class="col-md-1 indibook uniqucallee" id="kmeans" style="width:80%;">
-		<h3 class="text-center">K-Means Unique Callers Cluster</h3>
+		<h3 class="text-center">K-Means Unique Callees Cluster</h3>
 <!-- <img src="img/pca.png" width="515px" height="650px" /> -->
   		</div>
   		<br/>
   		<div class="col-md-1 indibook uniquecallee" id="scatter" style="width:80%;">
-  		<h3 class="text-center">K-Means Unique Callees Cluster</h3>
+  		<h3 class="text-center">K-Means Unique Callers Cluster</h3>
   			<!-- <img src="img/cluster.png" width="515px" height="650px"/> -->
   		</div>
 
@@ -92,7 +92,7 @@ function fraud(number){
 	
 <script type="text/javascript">
 $.ajax({
-	  url: "/uniquecallers"
+	  url: "uniquecallers"
 	}).done(function(result) {
 	  var data = result;
 	  var w = 515;
@@ -136,7 +136,7 @@ $.ajax({
 	
 
 $.ajax({
-	  url: "/uniquecallee"
+	  url: "uniquecallee"
 	}).done(function(result) {
 		var calleeData = result;
 		var w = 515;
@@ -179,7 +179,7 @@ $.ajax({
 	
 	
 $.ajax({
-	  url: "/kmeansUniqueCallee",
+	  url: "kmeansUniqueCallee",
 	  
 	  //contentType: "application/json",
 	  dataType: "json"
@@ -269,7 +269,7 @@ for(var i=0;i<TotalUniqueCalee.length;i++){
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("unique Callee");
+      .text("unique Callers");
 
   // draw dots
   svg.selectAll(".dot")
@@ -325,7 +325,7 @@ $(document).ready(function()
     }); 
 
 $.ajax({
-	  url: "/normal"
+	  url: "normal"
 	}).done(function(result) {
 		$("#anomaly").html(
         		
@@ -366,7 +366,7 @@ $(document).ready(function()
     }); 
 
 $.ajax({
-	  url: "/normalCallee"
+	  url: "normalCallee"
 	}).done(function(result) {
 		$("#anomalyCallee").html(
         		

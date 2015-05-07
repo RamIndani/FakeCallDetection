@@ -1,4 +1,4 @@
-var jsonData ={
+var d ={
 	    "CallingNumber": [
 	                      34653736089,
 	                      19283431093,
@@ -1498,7 +1498,7 @@ var jsonData ={
 	              };
 
 $.ajax({
-	  url: "/kmeansUniqueCallers"
+	  url: "kmeansUniqueCallers"
 	}).done(function(result) {
 		var jsonData = result;
 		jsonData = JSON.parse(jsonData);

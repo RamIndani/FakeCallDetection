@@ -9,7 +9,6 @@
   background-image: url('../img/mainpage.jpg');
   width: 100%;
   height: 100%;
-  
   -webkit-filter: blur(5px);
   -moz-filter: blur(5px);
   -o-filter: blur(5px);
@@ -61,7 +60,7 @@ a:active {
   margin-left:50px;
   margin-top:80px;
   width:100%;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .indibook{
@@ -79,6 +78,7 @@ a:active {
 .indibook:hover{
   background-color:#FFFFFF;
   opacity:1.0;
+  color:#000;
 }
 
 .footer {
@@ -109,4 +109,40 @@ rect {
 }
 rect:hover{
 	fill: orange;
+}
+
+body {
+  font: 11px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 28px;
+  pointer-events: none;
+}
+
+.main text {
+    font: 10px sans-serif;	
+}
+
+.axis line, .axis path {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+
+circle {
+    fill: steelblue;
 }
